@@ -28,15 +28,15 @@ class User extends Component
 
     public function saveUser()
     {
-        if(empty($this->user_id)) {
+        if (empty($this->user_id)) {
             $this->validate(
-               array_merge(
-                   $this->rules,
-                   [
-                       'email' => ['email', 'unique:users'],
-                       'password' => ['required']
-                   ]
-               )
+                array_merge(
+                    $this->rules,
+                    [
+                        'email' => ['email', 'unique:users'],
+                        'password' => ['required']
+                    ]
+                )
             );
             $user = new Pengguna();
         } else {
@@ -52,12 +52,12 @@ class User extends Component
         $user->name = $this->name;
         $user->email = $this->email;
 
-        if(!empty($this->password)) {
+        if (!empty($this->password)) {
             $user->password = Hash::make($this->password);
         }
 
-        if($this->photo) {
-            $user->photos = $this->photo->store('photos','public');
+        if ($this->photo) {
+            $user->photos = $this->photo->store('photos', 'public');
         }
 
         $user->save();
@@ -102,7 +102,7 @@ class User extends Component
     public function getPhoto($user_id)
     {
         $user = Pengguna::find($user_id);
-        return response()->download(storage_path('app/'. $user->photos));
+        return response()->download(storage_path('app/' . $user->photos));
     }
 
     public function updatingSearch()
@@ -112,13 +112,16 @@ class User extends Component
 
     public function render()
     {
-        $users = Pengguna::where('name','like', '%' . $this->search . '%')
-            ->orWhere('email','like', '%' . $this->search . '%')
+        $users = Pengguna::when($this->search, function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhere('email', 'like', '%' . $this->search . '%');
+            })
             ->orderBy('name', 'ASC')
             ->paginate(10);
+
         return view('livewire.user', [
-            'users' => $users
-        ])
+                'users' => $users
+            ])
             ->extends('layouts.app');
     }
 }

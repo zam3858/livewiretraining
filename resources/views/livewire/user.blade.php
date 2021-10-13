@@ -75,7 +75,7 @@
 
                     <button class="btn btn-danger btn-sm"
                             onclick="deleteUser({{$user->id}})"
-                    >Delete {{ $user->id }}
+                    >Delete
                     </button>
 
                     <button type="button" class="btn btn-primary btn-sm"
@@ -129,16 +129,18 @@
         </div>
     </div>
 
-    <script>
-        function showUser(name, email) {
-            document.getElementById('modal_name').innerText = name;
-            document.getElementById('modal_email').innerText = email;
-        }
-
-        function deleteUser(user_id) {
-            if(confirm('Are you sure')) {
-                Livewire.first().delete(user_id)
+    @section('scripts')
+        <script>
+            function showUser(name, email) {
+                document.getElementById('modal_name').innerText = name;
+                document.getElementById('modal_email').innerText = email;
             }
-        }
-    </script>
+
+            function deleteUser(user_id) {
+                if(confirm('Are you sure')) {
+                    Livewire.first().delete(user_id)
+                }
+            }
+        </script>
+    @endsection
 </div>

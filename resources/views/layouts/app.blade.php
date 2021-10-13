@@ -451,5 +451,7 @@
         integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ"
         crossorigin="anonymous"></script>
 @livewireScripts
+
+@yield('scripts')
 </body>
 </html>
