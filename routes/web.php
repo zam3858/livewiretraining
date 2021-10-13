@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Livewire\User\User;
 use Illuminate\Support\Facades\Route;
 //use App\Http\Controllers\UserController;
-use \App\Http\Livewire\User\User;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -10,6 +11,7 @@ Route::get('/', function () {
 
 //Route::get('/users', [UserController::class, 'index']);
 Route::get('/users', User::class);
+Route::get('/jabatans', \App\Http\Livewire\Jabatan::class);
 
 
 Route::middleware(['auth'])->group(function() {
