@@ -1,4 +1,5 @@
 <div>
+    <h1>Pengguna</h1>
     <div class="p-4">
         <input type="hidden" name="user_id" wire:model="user_id">
         <div class="mb-3">
