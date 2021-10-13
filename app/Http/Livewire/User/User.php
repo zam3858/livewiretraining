@@ -115,7 +115,7 @@ class User extends Component
         $users = Pengguna::where('name','like', '%' . $this->search . '%')
             ->orWhere('email','like', '%' . $this->search . '%')
             ->orderBy('name', 'ASC')
-            ->paginate(5);
+            ->paginate(10);
         return view('livewire.user', [
             'users' => $users
         ])

@@ -51,7 +51,7 @@
                placeholder="Search"
         >
     </div>
-    <table class="table table-striped table-compact">
+    <table class="table table-striped table-compact" >
         <tr>
             <th>Avatar</th>
             <th>Name</th>
@@ -67,15 +67,15 @@
                 </td>
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
-                <td x-data>
+                <td>
                     <button class="btn btn-primary btn-sm"
                             wire:click="edit({{ $user->id }})"
                     >Edit
                     </button>
 
                     <button class="btn btn-danger btn-sm"
-                            x-on:click="deleteUser($wire, {{ $user->id }})"
-                    >Delete
+                            onclick="if(confirm('Are you sure')) { Livewire.first().delete({{ $user->id }}) }"
+                    >Delete {{ $user->id }}
                     </button>
 
                     <button type="button" class="btn btn-primary btn-sm"
