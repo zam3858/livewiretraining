@@ -24,57 +24,10 @@ class User extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    protected $rules = ['name' => ['required', 'min:3']];
-
-    public function saveUser()
-    {
-        if (empty($this->user_id)) {
-            $this->validate(
-                array_merge(
-                    $this->rules,
-                    [
-                        'email' => ['email', 'unique:users'],
-                        'password' => ['required']
-                    ]
-                )
-            );
-            $user = new Pengguna();
-        } else {
-            $this->validate(
-                array_merge(
-                    $this->rules,
-                    ['email' => ['email', Rule::unique('users')->ignore($this->user_id)]]
-                )
-            );
-            $user = Pengguna::find($this->user_id);
-        }
-
-        $user->name = $this->name;
-        $user->email = $this->email;
-
-        if (!empty($this->password)) {
-            $user->password = Hash::make($this->password);
-        }
-
-        if ($this->photo) {
-            $user->photos = $this->photo->store('photos', 'public');
-        }
-
-        $user->save();
-
-        $this->resetUser();
-
-        session()->flash('alert_message', "Berjaya simpan");
-    }
-
-    public function edit($user_id)
-    {
-        $user = Pengguna::find($user_id);
-        $this->user_id = $user->id;
-        $this->name = $user->name;
-        $this->email = $user->email;
-        $this->photo = '';
-    }
+    protected $listeners = [
+        'addUser' => '$refresh',
+        'deletedUser' => '$refresh'
+    ];
 
     public function show($user_id)
     {
@@ -82,21 +35,6 @@ class User extends Component
         $this->name = $user->name;
         $this->email = $user->email;
         $this->photo = $user->photos;
-    }
-
-    public function delete($user_id)
-    {
-        $user = Pengguna::find($user_id);
-        $user->delete();
-    }
-
-    public function resetUser()
-    {
-        $this->user_id = '';
-        $this->name = '';
-        $this->email = '';
-        $this->password = '';
-        $this->photo = '';
     }
 
     public function getPhoto($user_id)
