@@ -103,7 +103,8 @@
 
             function deleteUser(user_id) {
                 if(confirm('Are you sure')) {
-                    Livewire.emit('deleteUser', user_id)
+                    //Livewire.emit('deleteUser', user_id)
+                    Livewire.all()[0].delete(user_id)
                 }
             }
         </script>
