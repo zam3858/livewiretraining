@@ -7,17 +7,22 @@ use Livewire\Component;
 use \App\Models\User as Pengguna;
 use Illuminate\Validation\Rule;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 
 class User extends Component
 {
     // trait
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     //public $users;
     public $user_id = '';
     public $name = '';
     public $email = '';
     public $password = '';
+    public $photo = '';
+    public $search = '';
+
+    protected $paginationTheme = 'bootstrap';
 
     protected $rules = ['name' => ['required', 'min:3']];
 
@@ -51,11 +56,13 @@ class User extends Component
             $user->password = Hash::make($this->password);
         }
 
+        if($this->photo) {
+            $user->photos = $this->photo->store('photos','public');
+        }
+
         $user->save();
 
         $this->resetUser();
-
-        $this->updateUserList();
 
         session()->flash('alert_message', "Berjaya simpan");
     }
@@ -66,6 +73,15 @@ class User extends Component
         $this->user_id = $user->id;
         $this->name = $user->name;
         $this->email = $user->email;
+        $this->photo = '';
+    }
+
+    public function show($user_id)
+    {
+        $user = Pengguna::find($user_id);
+        $this->name = $user->name;
+        $this->email = $user->email;
+        $this->photo = $user->photos;
     }
 
     public function delete($user_id)
@@ -80,12 +96,28 @@ class User extends Component
         $this->name = '';
         $this->email = '';
         $this->password = '';
+        $this->photo = '';
+    }
+
+    public function getPhoto($user_id)
+    {
+        $user = Pengguna::find($user_id);
+        return response()->download(storage_path('app/'. $user->photos));
+    }
+
+    public function updatingSearch()
+    {
+        $this->resetPage();
     }
 
     public function render()
     {
+        $users = Pengguna::where('name','like', '%' . $this->search . '%')
+            ->orWhere('email','like', '%' . $this->search . '%')
+            ->orderBy('name', 'ASC')
+            ->paginate(5);
         return view('livewire.user', [
-            'users' => Pengguna::orderBy('name', 'ASC')->paginate(5)
+            'users' => $users
         ])
             ->extends('layouts.app');
     }
