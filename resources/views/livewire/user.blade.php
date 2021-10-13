@@ -74,7 +74,7 @@
                     </button>
 
                     <button class="btn btn-danger btn-sm"
-                            onclick="if(confirm('Are you sure')) { Livewire.first().delete({{ $user->id }}) }"
+                            onclick="deleteUser({{$user->id}})"
                     >Delete {{ $user->id }}
                     </button>
 
@@ -135,9 +135,9 @@
             document.getElementById('modal_email').innerText = email;
         }
 
-        function deleteUser(wire, user_id) {
-            if(confirm("Are you sure to delete?")) {
-                wire.delete(user_id);
+        function deleteUser(user_id) {
+            if(confirm('Are you sure')) {
+                Livewire.first().delete(user_id)
             }
         }
     </script>
