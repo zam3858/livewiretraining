@@ -67,14 +67,14 @@
                 </td>
                 <td>{{ $user->name }}</td>
                 <td>{{ $user->email }}</td>
-                <td>
+                <td x-data>
                     <button class="btn btn-primary btn-sm"
                             wire:click="edit({{ $user->id }})"
                     >Edit
                     </button>
 
                     <button class="btn btn-danger btn-sm"
-                            wire:click="delete({{ $user->id }})"
+                            x-on:click="deleteUser($wire, {{ $user->id }})"
                     >Delete
                     </button>
 
@@ -133,6 +133,12 @@
         function showUser(name, email) {
             document.getElementById('modal_name').innerText = name;
             document.getElementById('modal_email').innerText = email;
+        }
+
+        function deleteUser(wire, user_id) {
+            if(confirm("Are you sure to delete?")) {
+                wire.delete(user_id);
+            }
         }
     </script>
 </div>
